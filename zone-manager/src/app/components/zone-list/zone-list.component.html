@@ -1,0 +1,11 @@
+<div class="card" style="width: 18rem;">
+    <div class="card-header">
+        Zones
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item"
+            *ngFor="let z of zones">
+            <zone-detail [zone]="z"></zone-detail>
+        </li>
+    </ul>
+</div>
