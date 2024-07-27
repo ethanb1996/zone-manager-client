@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserModule } from '@angular/platform-browser';
+
 import { AppComponent } from './app.component';
 import { ZoneListComponent } from './components/zone-list/zone-list.component';
 import { ZoneDetailComponent } from './components/zone-detail/zone-detail.component';
@@ -18,7 +20,8 @@ import { ZonesDashboardComponent } from './components/zones-dashboard/zones-dash
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

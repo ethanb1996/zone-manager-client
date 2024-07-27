@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ZoneStoreService } from 'src/app/store/zone-store.service';
 import { Zone } from 'src/app/types/zone';
 
 @Component({
@@ -7,7 +8,7 @@ import { Zone } from 'src/app/types/zone';
   styleUrls: ['./zone-list.component.scss']
 })
 export class ZoneListComponent {
-
+  
   public zones: Zone[] = [
     {
       id: 1,
@@ -19,4 +20,12 @@ export class ZoneListComponent {
       name: 'zone2',
       points: [[5.3, 12.0], [8.3, 12.0], [8.3, 8.0], [4.4, 4.7]]
     }]
+    
+    constructor(private zoneStoreService: ZoneStoreService) {}
+
+    addZone() {
+      const newZone = { id: Date.now(), name: `Zone ${this.zones.length + 1}`, points: [] };
+      this.zones.push(newZone);
+      this.zoneStoreService.setSelectedZone(newZone);
+    }
 }
