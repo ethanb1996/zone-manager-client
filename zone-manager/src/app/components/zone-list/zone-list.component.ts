@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+import { CanvasActionsService } from 'src/app/services/canvas-actions.service';
 import { ZoneStoreService } from 'src/app/store/zone-store.service';
-import { Zone } from 'src/app/types/zone';
+
+const MAX_POINT = 4
 
 @Component({
   selector: 'zone-list',
@@ -9,34 +11,27 @@ import { Zone } from 'src/app/types/zone';
 })
 export class ZoneListComponent {
 
-  public zones: Zone[] = [
-    {
-      id: 1,
-      name: 'zone1',
-      points: [[12.3, 12.0], [16.3, 12.0], [16.3, 8.0], [11.4, 8.7]]
-    },
-    {
-      id: 2,
-      name: 'zone2',
-      points: [[5.3, 12.0], [8.3, 12.0], [8.3, 8.0], [4.4, 4.7]]
-    }]
+  constructor(public zoneStoreService: ZoneStoreService,
+    private canvasActionsService:CanvasActionsService) { }
 
-  constructor(public zoneStoreService: ZoneStoreService) { }
-
-  addZone() {
-    const newZone = { id: Date.now(), name: `Zone ${this.zones.length + 1}`, points: [] };
-    this.zones.push(newZone);
-    this.zoneStoreService.setSelectedZone(newZone);
+  createZone() {
+    this.canvasActionsService.clearCanvas();
+    this.zoneStoreService.setPolygon([]);
+    
+    // this.zoneStoreService.setSelectedZone(newZone);
     this.zoneStoreService.setIsDrawingZone(true)
   }
   saveZone() {
     this.zoneStoreService.setIsDrawingZone(false);
+    // Call the api here
     if(this.isZoneValid()){
-      this.zoneStoreService.addZone(this.zoneStoreService.getSelectedZoneSnapShot())
+      this.zoneStoreService.addZone({id:1111, name:"sdfsdf",points: this.zoneStoreService.getPolygon()})
+      this.zoneStoreService.setPolygon([]);
+      this.canvasActionsService.clearCanvas();
     }
   }
 
   private isZoneValid(){
-    return true;
+    return this.zoneStoreService.getPolygon().length === MAX_POINT;
   }
 }

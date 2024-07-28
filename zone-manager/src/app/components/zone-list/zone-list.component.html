@@ -5,15 +5,15 @@
                 Zones
             </div>
             <div class="col-4 d-flex flex-row-reverse">
-                <button type="button" class="btn btn-outline-secondary btn-sm" (click)="addZone()"
+                <button type="button" class="btn btn-outline-secondary btn-sm" (click)="createZone()"
                     [disabled]="zoneStoreService.getIsDrawingZone() | async">Add Zone</button>
                 <button type="button" class="btn btn-outline-secondary btn-sm" (click)="saveZone()"
                     [disabled]="!(zoneStoreService.getIsDrawingZone() | async)">Save Zone</button>
             </div>
         </div>
     </div>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item" *ngFor="let z of zones">
+    <ul class="list-group list-group-flush scrollable-list">
+        <li class="list-group-item" *ngFor="let z of zoneStoreService.getAllZones() | async">
             <zone-detail [zone]="z"></zone-detail>
         </li>
     </ul>
