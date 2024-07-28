@@ -10,11 +10,19 @@ import { Zone } from 'src/app/types/zone';
 })
 export class ZoneDetailComponent {
   @Input() zone!: Zone;
-  
-  constructor(private zoneStoreService: ZoneStoreService) {}
-  
+
+  constructor(private zoneStoreService: ZoneStoreService) { }
+
   selectZone() {
     this.zoneStoreService.setSelectedZone(this.zone);
   }
 
+  deleteZone() {
+    const zones = this.zoneStoreService.getAllZonesSnapShot();
+    const zoneIndex = zones.findIndex(z => z.id === this.zone.id)
+    if(zoneIndex > -1){
+      zones.splice(zoneIndex,1);
+      this.zoneStoreService.setAllZones(zones)
+    }
+  }
 }

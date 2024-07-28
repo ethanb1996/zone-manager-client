@@ -1,7 +1,14 @@
-<div class="card detail-effect" style="width: 100%;" (click)="selectZone()">
-    <div class="card-body">
-        <h5 class="card-title">{{zone.name}}</h5>
-        <h6 class="card-subtitle mb-2 text-muted">Id: {{zone.id}}</h6>
-        <p class="card-text">Points: {{zone.points}}</p>
+<div class="row justify-content-between">
+    <div class="col-11">
+        <div class="card detail-effect" style="width: 100%;" (click)="selectZone()">
+            <div class="card-body">
+                <h5 class="card-title">{{zone.name}}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Id: {{zone.id}}</h6>
+                <p class="card-text">Points: {{zone.points}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-1 d-flex align-items-center">
+        <button type="button" class="btn btn btn-outline-danger btn-sm" (click)="deleteZone()">delete</button>
     </div>
 </div>

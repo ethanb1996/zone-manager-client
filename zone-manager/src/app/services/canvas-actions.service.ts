@@ -40,8 +40,6 @@ export class CanvasActionsService {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
-
-
   private enableCanvas(): void {
     const mouseMove$ = fromEvent<MouseEvent>(this.canvas, 'mousemove').pipe(
       tap(event => this.onMouseMove(event))
@@ -66,6 +64,8 @@ export class CanvasActionsService {
     this.clearCanvas()
     if (polygon.length !== MAX_POINT) return;
 
+    this.drawExistingPoints(polygon);
+    
     this.context.strokeStyle = 'red';
     this.context.lineWidth = 2;
 
@@ -92,7 +92,7 @@ export class CanvasActionsService {
     if (polygon.length === MAX_POINT-1 && this.isPointNearFirstPoint(point)) {
       polygon.push(polygon[0]);
       this.drawPolygon(polygon);
-      this.drawExistingPoints();
+      
     } else {
       polygon.push(point);
       this.drawPoint(point);
@@ -103,13 +103,12 @@ export class CanvasActionsService {
     if (polygon.length && polygon.length < MAX_POINT) {
       const point = this.getCanvasCoordinates(event);
       this.clearCanvas();
-      this.drawExistingPoints();
+      this.drawExistingPoints(polygon);
       this.drawTemporaryLine(point);
     }
   }
-  private drawExistingPoints(): void {
-    this.zoneStoreService.getPolygon()
-      .forEach((point: number[]) => this.drawPoint(point));
+  private drawExistingPoints(polygon : number[][]): void {
+    polygon.forEach((point: number[]) => this.drawPoint(point));
     this.drawLines();
   }
 
