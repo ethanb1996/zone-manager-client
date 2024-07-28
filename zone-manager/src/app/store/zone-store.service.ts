@@ -11,37 +11,7 @@ export class ZoneStoreService implements OnDestroy{
 
   private selectedZone$ :BehaviorSubject<Zone> = new BehaviorSubject<Zone>({id:-1,name:"", points:[]})
   private isDrawingZone$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
-  private allZones$: BehaviorSubject<Zone[]> = new BehaviorSubject<Zone[]>([
-    {
-      id: 1,
-      name: 'zone1',
-      points: [[12.3, 12.0], [16.3, 12.0], [16.3, 8.0], [11.4, 8.7]]
-    },
-    {
-      id: 1,
-      name: 'zone1',
-      points: [[12.3, 12.0], [16.3, 12.0], [16.3, 8.0], [11.4, 8.7]]
-    },
-    {
-      id: 1,
-      name: 'zone1',
-      points: [[12.3, 12.0], [16.3, 12.0], [16.3, 8.0], [11.4, 8.7]]
-    },
-    {
-      id: 1,
-      name: 'zone1',
-      points: [[12.3, 12.0], [16.3, 12.0], [16.3, 8.0], [11.4, 8.7]]
-    },
-    {
-      id: 1,
-      name: 'zone1',
-      points: [[12.3, 12.0], [16.3, 12.0], [16.3, 8.0], [11.4, 8.7]]
-    },
-    {
-      id: 2,
-      name: 'zone2',
-      points: [[5.3, 12.0], [8.3, 12.0], [8.3, 8.0], [4.4, 4.7]]
-    }])
+  private allZones$: BehaviorSubject<Zone[]> = new BehaviorSubject<Zone[]>([])
   private polygon: number[][] = [];
 
   constructor() { }
@@ -56,10 +26,6 @@ export class ZoneStoreService implements OnDestroy{
     this.selectedZone$.next(zone);
   }
 
-  public addPointToSelectedZone(point: number[]):void{
-    const zone = this.getSelectedZoneSnapShot()
-    this.setSelectedZone({...zone,points:[...zone.points,point]})
-  }
   public getIsDrawingZone(): Observable<boolean>{
     return this.isDrawingZone$.asObservable();
   }

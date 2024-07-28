@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class ZoneApiService {
-  private baseUrl = 'http://localhost:8000/';
+  private baseUrl = 'http://localhost:8000';
 
   constructor(private http: HttpClient) { }
 

@@ -1,4 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { take } from 'rxjs';
+import { ZoneApiService } from 'src/app/services/zone-api.service';
 import { ZoneStoreService } from 'src/app/store/zone-store.service';
 import { Zone } from 'src/app/types/zone';
 
@@ -10,8 +12,8 @@ import { Zone } from 'src/app/types/zone';
 })
 export class ZoneDetailComponent {
   @Input() zone!: Zone;
-
-  constructor(private zoneStoreService: ZoneStoreService) { }
+  constructor(private zoneStoreService: ZoneStoreService, 
+    private zoneApiService: ZoneApiService) { }
 
   selectZone() {
     if(!this.zoneStoreService.getIsDrawingZoneSnapShot()){
@@ -25,6 +27,7 @@ export class ZoneDetailComponent {
     if (zoneIndex > -1) {
       zones.splice(zoneIndex, 1);
       this.zoneStoreService.setAllZones(zones)
+      this.zoneApiService.deleteZone(this.zone.id).pipe(take(1)).subscribe();
     }
   }   
 }
