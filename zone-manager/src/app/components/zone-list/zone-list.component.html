@@ -4,14 +4,16 @@
             <div class="col-4">
                 Zones
             </div>
-            <div class="col-2">
-                <button type="button" class="btn btn-outline-secondary sized" (click)="addZone()">Add Zone</button>
+            <div class="col-4 d-flex flex-row-reverse">
+                <button type="button" class="btn btn-outline-secondary btn-sm" (click)="addZone()"
+                    [disabled]="zoneStoreService.getIsDrawingZone() | async">Add Zone</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" (click)="saveZone()"
+                    [disabled]="!(zoneStoreService.getIsDrawingZone() | async)">Save Zone</button>
             </div>
-          </div>
+        </div>
     </div>
     <ul class="list-group list-group-flush">
-        <li class="list-group-item"
-            *ngFor="let z of zones">
+        <li class="list-group-item" *ngFor="let z of zones">
             <zone-detail [zone]="z"></zone-detail>
         </li>
     </ul>
