@@ -14,7 +14,9 @@ export class ZoneDetailComponent {
   constructor(private zoneStoreService: ZoneStoreService) { }
 
   selectZone() {
-    this.zoneStoreService.setSelectedZone(this.zone);
+    if(!this.zoneStoreService.getIsDrawingZoneSnapShot()){
+      this.zoneStoreService.setSelectedZone(this.zone);
+    }
   }
 
   deleteZone() {
@@ -24,7 +26,5 @@ export class ZoneDetailComponent {
       zones.splice(zoneIndex, 1);
       this.zoneStoreService.setAllZones(zones)
     }
-  }
-  editZone() {
-  }
+  }   
 }
