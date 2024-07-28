@@ -3,12 +3,13 @@ import { Injectable, OnDestroy } from '@angular/core';
 
 import { Zone } from '../types/zone';
 
+
 @Injectable({
   providedIn: 'root'
 })
 export class ZoneStoreService implements OnDestroy{
 
-  private selectedZone$ :BehaviorSubject<Zone> = new BehaviorSubject<Zone>(null as unknown as Zone)
+  private selectedZone$ :BehaviorSubject<Zone> = new BehaviorSubject<Zone>({id:-1,name:"", points:[]})
   private isDrawingZone$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
   private allZones$: BehaviorSubject<Zone[]> = new BehaviorSubject<Zone[]>([])
   constructor() { }
@@ -23,6 +24,10 @@ export class ZoneStoreService implements OnDestroy{
     this.selectedZone$.next(zone);
   }
 
+  public addPointToSelectedZone(point: number[]):void{
+    const zone = this.getSelectedZoneSnapShot()
+    this.setSelectedZone({...zone,points:[...zone.points,point]})
+  }
   public getIsDrawingZone(): Observable<boolean>{
     return this.isDrawingZone$.asObservable();
   }

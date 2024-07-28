@@ -26,7 +26,7 @@ export class CanvasBoardComponent implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit(): void {
     this.zoneSubscription = this.zoneStoreService.getSelectedZone().subscribe((zone: Zone) => {
       if (zone) {
-        this.canvasActionsService.editZoneOnCanvas(zone);
+        this.canvasActionsService.drawPolygon(zone);
       }
     });
   }

@@ -31,6 +31,12 @@ export class ZoneListComponent {
   }
   saveZone() {
     this.zoneStoreService.setIsDrawingZone(false);
-    this.zoneStoreService.addZone(this.zoneStoreService.getSelectedZoneSnapShot())
+    if(this.isZoneValid()){
+      this.zoneStoreService.addZone(this.zoneStoreService.getSelectedZoneSnapShot())
+    }
+  }
+
+  private isZoneValid(){
+    return true;
   }
 }
