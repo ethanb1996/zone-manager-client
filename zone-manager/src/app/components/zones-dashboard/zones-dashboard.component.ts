@@ -1,9 +1,11 @@
+import { FormControl } from '@angular/forms';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { catchError, Subscription, take, tap, throwError } from 'rxjs';
-import { CanvasActionsService } from 'src/app/services/canvas-actions.service';
+
+import { Zone, ZoneDetails } from 'src/app/types/zone';
 import { ZoneApiService } from 'src/app/services/zone-api.service';
 import { ZoneStoreService } from 'src/app/store/zone-store.service';
-import { Zone, ZoneDetails } from 'src/app/types/zone';
+import { CanvasActionsService } from 'src/app/services/canvas-actions.service';
 
 const MAX_POINT = 4
 
@@ -13,43 +15,46 @@ const MAX_POINT = 4
   styleUrls: ['./zones-dashboard.component.scss']
 })
 export class ZonesDashboardComponent implements OnInit, OnDestroy {
-// TODO - insert a name input for the user 
+  
+  public zoneName: FormControl = new FormControl('');
 
   private subscriptions: Subscription = new Subscription();
+
   constructor(public zoneStoreService: ZoneStoreService,
     private canvasActionsService: CanvasActionsService,
     private zoneApiService: ZoneApiService) { }
 
 
   ngOnInit(): void {
-    const subscription = this.zoneApiService.fetchZones().pipe(
+    this.zoneApiService.fetchZones().pipe(
+      take(1),
       tap((zones: Zone[]) => this.zoneStoreService.setAllZones(zones)),
       catchError(error => {
         console.error('Error fetching zones', error);
         return throwError(() => new Error(error));
       })
     ).subscribe();
-    this.subscriptions.add(subscription);
   }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
-    
   }
 
   createZone() {
     this.canvasActionsService.clearCanvas();
-    this.zoneStoreService.addZone({} as Zone)
     this.zoneStoreService.setPolygon([]);
     this.zoneStoreService.setIsDrawingZone(true)
   }
   saveZone() {
     this.zoneStoreService.setIsDrawingZone(false);
-    // Call the api here
     if (this.isZoneValid()) {
-      const zoneDetails : ZoneDetails = {name: "test",points: this.zoneStoreService.getPolygon() }
-      // this.zoneStoreService.addZone({ id: 1111, name: "sdfsdf", points: this.zoneStoreService.getPolygon() })
-      this.zoneApiService.createZone(zoneDetails).pipe(take(1)).subscribe()
+      const zoneDetails: ZoneDetails = { name: this.zoneName.value, points: this.zoneStoreService.getPolygon() }
+      this.zoneApiService.createZone(zoneDetails).pipe(
+        take(1),
+        tap((zone: Zone) => {
+          this.zoneStoreService.addZone(zone)
+          this.zoneName.setValue('')
+        })).subscribe()
       this.zoneStoreService.setPolygon([]);
       this.canvasActionsService.clearCanvas();
     }

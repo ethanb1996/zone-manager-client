@@ -16,7 +16,7 @@ export class ZoneApiService {
   }
 
   createZone(zoneDetails: ZoneDetails): Observable<Zone> {
-    return this.http.post<Zone>(`${this.baseUrl}/create_zone`, { zoneDetails });
+    return this.http.post<Zone>(`${this.baseUrl}/create_zone`, { ...zoneDetails });
   }
 
   deleteZone(id:number): Observable<any> {
