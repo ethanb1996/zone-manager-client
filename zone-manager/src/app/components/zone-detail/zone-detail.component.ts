@@ -20,9 +20,11 @@ export class ZoneDetailComponent {
   deleteZone() {
     const zones = this.zoneStoreService.getAllZonesSnapShot();
     const zoneIndex = zones.findIndex(z => z.id === this.zone.id)
-    if(zoneIndex > -1){
-      zones.splice(zoneIndex,1);
+    if (zoneIndex > -1) {
+      zones.splice(zoneIndex, 1);
       this.zoneStoreService.setAllZones(zones)
     }
+  }
+  editZone() {
   }
 }

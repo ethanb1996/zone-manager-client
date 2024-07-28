@@ -9,8 +9,6 @@ const MAX_POINT = 4
   providedIn: 'root'
 })
 export class CanvasActionsService {
-
-  //TODO - I need to link the selectedZone from the store to the canvas
   private canvas!: HTMLCanvasElement
   private context!: CanvasRenderingContext2D
 
@@ -65,7 +63,7 @@ export class CanvasActionsService {
     if (polygon.length !== MAX_POINT) return;
 
     this.drawExistingPoints(polygon);
-    
+
     this.context.strokeStyle = 'red';
     this.context.lineWidth = 2;
 
