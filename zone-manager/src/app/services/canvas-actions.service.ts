@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Zone } from '../types/zone';
 import { filter, fromEvent, map, Subscription, tap } from 'rxjs';
+
+import { ConfigService } from './config.service';
 import { ZoneStoreService } from '../store/zone-store.service';
 
-const MAX_POINT = 4
 
 @Injectable({
   providedIn: 'root'
@@ -11,11 +11,13 @@ const MAX_POINT = 4
 export class CanvasActionsService {
   private canvas!: HTMLCanvasElement
   private context!: CanvasRenderingContext2D
-
+  private MAX_POINT = this.configService.getConfig().maxPoint
 
   private subscriptions: Subscription = new Subscription();
 
-  constructor(private zoneStoreService: ZoneStoreService) { }
+  constructor(private zoneStoreService: ZoneStoreService,
+    private configService: ConfigService
+  ) { }
 
   public init(canvas: HTMLCanvasElement): void {
     this.canvas = canvas
@@ -23,7 +25,7 @@ export class CanvasActionsService {
     this.context = this.canvas.getContext('2d') as CanvasRenderingContext2D;
 
     this.zoneStoreService.getIsDrawingZone().subscribe(isDrawing => {
-      if(isDrawing) {
+      if (isDrawing) {
         this.enableCanvas();
       } else {
         this.disableCanvas();
@@ -44,7 +46,7 @@ export class CanvasActionsService {
     );
 
     const mouseClick$ = fromEvent<MouseEvent>(this.canvas, 'click').pipe(
-      filter(() => this.zoneStoreService.getPolygon().length < MAX_POINT),
+      filter(() => this.zoneStoreService.getPolygon().length < this.MAX_POINT),
       map((event: MouseEvent) => this.getCanvasCoordinates(event)),
       tap((point: number[]) => this.onCanvasClick(point))
     );
@@ -60,7 +62,7 @@ export class CanvasActionsService {
 
   public drawPolygon(polygon: number[][]): void {
     this.clearCanvas()
-    if (polygon.length !== MAX_POINT) return;
+    if (polygon.length !== this.MAX_POINT) return;
 
     this.drawExistingPoints(polygon);
 
@@ -87,10 +89,10 @@ export class CanvasActionsService {
   }
   private onCanvasClick(point: number[]): void {
     const polygon = this.zoneStoreService.getPolygon()
-    if (polygon.length === MAX_POINT-1 && this.isPointNearFirstPoint(point)) {
+    if (polygon.length === this.MAX_POINT - 1 && this.isPointNearFirstPoint(point)) {
       polygon.push(polygon[0]);
       this.drawPolygon(polygon);
-      
+
     } else {
       polygon.push(point);
       this.drawPoint(point);
@@ -98,14 +100,14 @@ export class CanvasActionsService {
   }
   private onMouseMove(event: MouseEvent): void {
     const polygon = this.zoneStoreService.getPolygon()
-    if (polygon.length && polygon.length < MAX_POINT) {
+    if (polygon.length && polygon.length < this.MAX_POINT) {
       const point = this.getCanvasCoordinates(event);
       this.clearCanvas();
       this.drawExistingPoints(polygon);
       this.drawTemporaryLine(point);
     }
   }
-  private drawExistingPoints(polygon : number[][]): void {
+  private drawExistingPoints(polygon: number[][]): void {
     polygon.forEach((point: number[]) => this.drawPoint(point));
     this.drawLines();
   }
@@ -113,7 +115,7 @@ export class CanvasActionsService {
   private drawPoint(point: number[]): void {
     this.context.fillStyle = 'black';
     this.context.beginPath();
-    this.context.arc(point[0], point[1], 5, 0, 2 * Math.PI);
+    this.context.arc(point[0], point[1], this.configService.getConfig().radiusPoint, 0, 2 * Math.PI);
     this.context.fill();
   }
 
@@ -140,22 +142,22 @@ export class CanvasActionsService {
       this.context.lineTo(polygon[i][0], polygon[i][1]);
     }
 
-    if (polygon.length === MAX_POINT) {
+    if (polygon.length === this.MAX_POINT) {
       this.context.lineTo(polygon[0][0], polygon[0][1]);
     }
 
     this.context.stroke();
   }
-  
+
   private isPointNearFirstPoint(point: number[]): boolean {
     const polygon = this.zoneStoreService.getPolygon()
     const firstPoint = polygon[0];
     const distance = Math.sqrt(Math.pow(point[0] - firstPoint[0], 2) + Math.pow(point[1] - firstPoint[1], 2));
-    return distance <= 10; // Adjust the threshold as needed
+    return distance <= 2 * this.configService.getConfig().radiusPoint;
   }
   private getCanvasCoordinates(event: MouseEvent): number[] {
     const rect = this.canvas.getBoundingClientRect();
     return [event.clientX - rect.left, event.clientY - rect.top]
   };
-  
+
 }

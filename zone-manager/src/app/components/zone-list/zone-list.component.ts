@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ZoneStoreService } from 'src/app/store/zone-store.service';
 
-const MAX_POINT = 4
 
 @Component({
   selector: 'zone-list',

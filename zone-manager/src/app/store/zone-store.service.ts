@@ -1,8 +1,8 @@
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Injectable, OnDestroy } from '@angular/core';
 
-import { Zone } from '../types/zone';
-const MAX_POINT = 4
+import { Zone } from '../types/zone'
+import { ConfigService } from '../services/config.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ export class ZoneStoreService implements OnDestroy{
   private allZones$: BehaviorSubject<Zone[]> = new BehaviorSubject<Zone[]>([])
   private polygon: number[][] = [];
 
-  constructor() { }
+  constructor(private configService: ConfigService) { }
 
   public getSelectedZone(): Observable<Zone>{
     return this.selectedZone$.asObservable();
@@ -55,7 +55,7 @@ export class ZoneStoreService implements OnDestroy{
     return this.polygon;
   }
   public setPointToPolygon(point: number[]): void{
-    if(this.polygon.length < MAX_POINT) this.polygon.push(point)
+    if(this.polygon.length < this.configService.getConfig().maxPoint) this.polygon.push(point)
   }
   public setPolygon(polygon: number[][]){
     this.polygon = polygon

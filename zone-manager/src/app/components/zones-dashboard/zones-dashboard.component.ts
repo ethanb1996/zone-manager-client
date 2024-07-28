@@ -6,8 +6,8 @@ import { Zone, ZoneDetails } from 'src/app/types/zone';
 import { ZoneApiService } from 'src/app/services/zone-api.service';
 import { ZoneStoreService } from 'src/app/store/zone-store.service';
 import { CanvasActionsService } from 'src/app/services/canvas-actions.service';
+import { ConfigService } from 'src/app/services/config.service';
 
-const MAX_POINT = 4
 
 @Component({
   selector: 'zones-dashboard',
@@ -22,7 +22,8 @@ export class ZonesDashboardComponent implements OnInit, OnDestroy {
 
   constructor(public zoneStoreService: ZoneStoreService,
     private canvasActionsService: CanvasActionsService,
-    private zoneApiService: ZoneApiService) { }
+    private zoneApiService: ZoneApiService,
+    private configService: ConfigService) { }
 
 
   ngOnInit(): void {
@@ -65,6 +66,6 @@ export class ZonesDashboardComponent implements OnInit, OnDestroy {
   }
 
   private isZoneValid() {
-    return this.zoneStoreService.getPolygon().length === MAX_POINT;
+    return this.zoneStoreService.getPolygon().length === this.configService.getConfig().maxPoint;
   }
 }

@@ -1,25 +1,28 @@
-import { Injectable } from '@angular/core';
-import { Zone, ZoneDetails } from '../types/zone';
 import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+
+import { ConfigService } from './config.service';
+import { Zone, ZoneDetails } from '../types/zone';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ZoneApiService {
-  private baseUrl = 'http://localhost:8000';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+    private configService: ConfigService
+  ) { }
 
   fetchZones(): Observable<Zone[]> {
-    return this.http.get<Zone[]>(`${this.baseUrl}/all_zones`);
+    return this.http.get<Zone[]>(`${this.configService.getConfig().baseUrl}/all_zones`);
   }
 
   createZone(zoneDetails: ZoneDetails): Observable<Zone> {
-    return this.http.post<Zone>(`${this.baseUrl}/create_zone`, { ...zoneDetails });
+    return this.http.post<Zone>(`${this.configService.getConfig().baseUrl}/create_zone`, { ...zoneDetails });
   }
 
   deleteZone(id:number): Observable<any> {
-    return this.http.delete<any>(`${this.baseUrl}/delete_zone/${id}`);
+    return this.http.delete<any>(`${this.configService.getConfig().baseUrl}/delete_zone/${id}`);
   }
 }
