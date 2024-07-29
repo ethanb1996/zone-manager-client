@@ -1,6 +1,6 @@
 # How to run the client?
 
-1. Open cmd on the <project directory> and run: "npm run start"
+1. Open cmd on the project directory "zone-manager" and run: "npm run start"
 2. Open Your browser on http://localhost:4200 
 
 # zone-manager-client
