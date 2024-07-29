@@ -48,17 +48,15 @@ export class ZonesDashboardComponent implements OnInit, OnDestroy {
   }
   saveZone() {
     this.zoneStoreService.setIsDrawingZone(false);
-    if (this.isZoneValid()) {
-      const zoneDetails: ZoneDetails = { name: this.zoneName.value, points: this.zoneStoreService.getPolygon() }
-      this.zoneApiService.createZone(zoneDetails).pipe(
-        take(1),
-        tap((zone: Zone) => {
-          this.zoneStoreService.addZone(zone)
-          this.zoneName.setValue('')
-        })).subscribe()
-      this.zoneStoreService.setPolygon([]);
-      this.canvasActionsService.clearCanvas();
-    }
+    const zoneDetails: ZoneDetails = { name: this.zoneName.value, points: this.zoneStoreService.getPolygon() }
+    this.zoneApiService.createZone(zoneDetails).pipe(
+      take(1),
+      tap((zone: Zone) => {
+        this.zoneStoreService.addZone(zone)
+        this.zoneName.setValue('')
+      })).subscribe()
+    this.zoneStoreService.setPolygon([]);
+    this.canvasActionsService.clearCanvas();
   }
   clearCanvas() {
     this.zoneStoreService.setIsDrawingZone(false);
