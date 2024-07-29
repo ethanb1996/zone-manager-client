@@ -18,7 +18,7 @@
                   <button type="button" class="btn btn-outline-secondary" (click)="createZone()"
                   [disabled]="zoneStoreService.getIsDrawingZone() | async">Draw Zone</button>
                   <button type="button" class="btn btn-outline-secondary" (click)="saveZone()"
-                    [disabled]="(!(zoneStoreService.getIsDrawingZone() | async) || (zoneName.value.length === 0))">Save Zone</button>
+                    [disabled]="(!(zoneStoreService.getIsDrawingZone() | async) || (zoneName.value.length === 0) || !isZoneValid()) ">Save Zone</button>
                 </div>
               </div>
             </div>

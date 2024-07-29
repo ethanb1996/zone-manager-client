@@ -15,7 +15,7 @@ import { ConfigService } from 'src/app/services/config.service';
   styleUrls: ['./zones-dashboard.component.scss']
 })
 export class ZonesDashboardComponent implements OnInit, OnDestroy {
-  
+
   public zoneName: FormControl = new FormControl('');
 
   private subscriptions: Subscription = new Subscription();
@@ -65,7 +65,9 @@ export class ZonesDashboardComponent implements OnInit, OnDestroy {
     this.canvasActionsService.clearCanvas();
   }
 
-  private isZoneValid() {
-    return this.zoneStoreService.getPolygon().length === this.configService.getConfig().maxPoint;
+  isZoneValid() {
+    const firstPoint = this.zoneStoreService.getPolygon()[0]
+    const lastPoint = this.zoneStoreService.getPolygon()[this.zoneStoreService.getPolygon().length - 1]
+    return firstPoint[0] === lastPoint[0] && firstPoint[1] === lastPoint[1]
   }
 }
