@@ -1,5 +1,5 @@
 {
-    "maxPoint":4,
+    "maxPoint":5,
     "baseUrl": "http://localhost:8000",
     "radiusPoint": 5
 }
